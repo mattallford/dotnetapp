@@ -1,19 +1,18 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace dotnetapp.Pages;
-
-public class IndexModel : PageModel
+namespace MyWebApp.Pages
 {
-    private readonly ILogger<IndexModel> _logger;
-
-    public IndexModel(ILogger<IndexModel> logger)
+    public class IndexModel : PageModel
     {
-        _logger = logger;
-    }
+        public string Message { get; private set; } = "Hello, world!";
 
-    public void OnGet()
-    {
+        public void OnGet()
+        {
+        }
 
+        public void OnPost(string name)
+        {
+            Message = $"Hello, {name}!";
+        }
     }
 }
