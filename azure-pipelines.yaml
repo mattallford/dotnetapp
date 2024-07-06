@@ -1,0 +1,38 @@
+trigger:
+  branches:
+    include:
+    - '*'
+
+variables:
+  buildConfiguration: 'Release'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.x'  # Use the appropriate version for your project
+
+- script: |
+    echo Restore dependencies...
+    dotnet restore
+  displayName: 'Restore dependencies'
+
+- script: |
+    echo Build the project...
+    dotnet build --configuration $(buildConfiguration)
+  displayName: 'Build'
+
+- script: |
+    echo Publish the project...
+    dotnet publish --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)
+  displayName: 'Publish'
+
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)'
+    artifact: 'drop'
+    publishLocation: 'Pipeline'
+  displayName: 'Publish Artifact'
